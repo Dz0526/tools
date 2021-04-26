@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-iconv -f SHIFT_JIS -t UTF-8 $1 | sed -e "s/¥/\\\\/g" > $2
+iconv -f cp932 -t UTF-8 $1 | sed -e "s/¥/\\\\/g" > $2
