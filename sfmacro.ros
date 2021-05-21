@@ -1,0 +1,23 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp(ql:quickload '(cl-vsgcc) :silent t)
+  )
+
+(defpackage :ros.script.vsgcc.3830255277
+  (:use :cl))
+(in-package :ros.script.vsgcc.3830255277)
+
+(defparameter *add-exp* (mapcar #'string' ("void clear(void) { int c; while ((c = getchar()) != '\n' && c != EOF) {}}" "#define scanf_s(fmt, ... ) scanf(fmt, __VA_ARGS__ )" "#define strcpy_s(s, data) strcpy(s, data)" "#define sscanf_s(fmt, ... ) sscanf(fmt, __VA_ARGS__ )" "#define rewind(s) clear()" "#define gets_s(s, num) fgets(s, num, stdin)")))
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (when (= 2 (length argv))
+    (with-open-file (in (car argv) :direction :input)
+      (with-open-file  (out (cadr argv) :direction :output :if-does-not-exist nil)
+        (cl-vsgcc:vsgcc in out *add-exp*)))))
+;;; vim: set ft=lisp lisp:
